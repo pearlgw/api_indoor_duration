@@ -25,6 +25,10 @@ def get_db():
     finally:
         db.close()
 
+@app.get('/')
+async def root_person_durations():
+    return {"message" : "Selamat Datang di Api Person Durations"}
+
 async def generate_api_key(length=32):
     characters = string.ascii_letters + string.digits
     return ''.join(secrets.choice(characters) for _ in range(length))
