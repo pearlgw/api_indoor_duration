@@ -25,7 +25,7 @@ def get_db():
     finally:
         db.close()
 
-@app.get('/')
+@app.get('/', tags=["Root"])
 async def root_person_durations():
     return {"message" : "Selamat Datang di Api Person Durations"}
 
