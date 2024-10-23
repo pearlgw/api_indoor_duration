@@ -15,6 +15,14 @@ app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
 bearer_scheme = HTTPBearer()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Ganti dengan URL frontend Anda
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 class APIKeyBase(BaseModel):
     api_key: str
 
