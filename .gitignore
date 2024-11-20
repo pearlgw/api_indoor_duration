@@ -1,0 +1,7 @@
+venv/
+.env
+app/**/__pycache__/
+app/__pycache__
+uploaded_images/
+.DS_Store
+Thumbs.db
