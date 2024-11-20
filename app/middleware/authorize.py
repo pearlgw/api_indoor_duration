@@ -13,7 +13,6 @@ def get_db():
     finally:
         db.close()
 
-# Middleware untuk otorisasi
 def authorize(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db)

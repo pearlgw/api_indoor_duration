@@ -3,9 +3,11 @@ from datetime import datetime
 import os
 from typing import Union
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
+from sqlalchemy import desc
 from sqlalchemy.orm import Session
 from app.config.config import SessionLocal
 from app.middleware.authorize import authorize
+from app.models.detail_person_duration import DetailPersonDuration
 from app.models.person_duration import PersonDuration
 from app.schemas.person_duration_schema import PersonDurationBaseCreate, PersonDurationBaseResponse, MessageResponsePersonDurationBase, PersonDurationWithDetailsResponse
 from app.schemas.detail_person_duration_schema import DetailPersonDurationBaseResponse, EndTimeUpdateRequest, PersonDurationResponseUpdate
@@ -86,7 +88,14 @@ def get_person_durations(db: Session = Depends(get_db)):
 
 @router.get("/{id}/details")
 def get_person_duration_details(id: int, db: Session = Depends(get_db)):
-    person_duration = db.query(PersonDuration).filter(PersonDuration.id == id).first()
-    if person_duration is None:
-        raise HTTPException(status_code=404, detail="PersonDuration not found")
-    return person_duration.details
+    details = (
+        db.query(DetailPersonDuration)
+        .filter(DetailPersonDuration.person_duration_id == id)
+        .order_by(desc(DetailPersonDuration.start_time))
+        .all()
+    )
+
+    if not details:
+        raise HTTPException(status_code=404, detail="Details not found for the given person_duration_id")
+
+    return details
