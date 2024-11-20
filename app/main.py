@@ -28,7 +28,7 @@ def get_db():
 
 @app.get("/")
 def root():
-    return {"message": "Welcome to api dinus indoor duration "}
+    return {"message": "Welcome to v2 api dinus indoor duration "}
 
 @app.post("/generate-api-key", response_model=ApiKeyResponse, tags=["Auth"])
 def generate_key(db: Session = Depends(get_db)):
