@@ -6,33 +6,31 @@ services:
     container_name: fastapi_indoor_duration
     ports:
       - "${PORT_MAPPING_FASTAPI}:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+    networks:
+      - indoor_duration_network
+
+  db:
+    image: postgres:latest
+    container_name: db_indoor_duration
     environment:
-      - ALLOW_CORS_ORIGINS=*
-      - ALLOW_CORS_METHODS=GET,POST,PUT,DELETE,OPTIONS
-      - ALLOW_CORS_HEADERS=Content-Type,Authorization
-    # depends_on:
-    #   - db
-    # networks:
-    #   - indoor_duration_network
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "${HOST_PORT_DB}:5432"
+    networks:
+      - indoor_duration_network
 
-  # db:
-  #   image: postgres:latest
-  #   container_name: db_indoor_duration
-  #   environment:
-  #     POSTGRES_USER: ${POSTGRES_USER}
-  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-  #     POSTGRES_DB: ${POSTGRES_DB}
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   ports:
-  #     - "${HOST_PORT_DB}:5432"
-  #   networks:
-  #     - indoor_duration_network
+networks:
+  indoor_duration_network:
+    driver: bridge
 
-# networks:
-#   indoor_duration_network:
-#     driver: bridge
-
-# volumes: 
-#   postgres_data:
-#     driver: local
+volumes: 
+  postgres_data:
+    driver: local
