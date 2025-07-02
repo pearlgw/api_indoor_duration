@@ -12,7 +12,9 @@ from fastapi.responses import FileResponse # type: ignore
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials # type: ignore
 from fastapi.middleware.cors import CORSMiddleware # type: ignore
 
-app = FastAPI()
+app = FastAPI(
+    root_path="/indoor-api"
+)
 models.Base.metadata.create_all(bind=engine)
 bearer_scheme = HTTPBearer()
 
